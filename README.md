@@ -30,7 +30,20 @@ Using the IEG project ratings dataset (n = 5,757 completed World Bank projects, 
 All models include region fixed effects and HC3 robust standard errors.
 
 > **55.1% of the PforR outcome premium is mediated through M&E quality.**
+> Indirect effect = 0.207, 95% bootstrap CI [0.116, 0.256], Sobel z = 5.04, p < 0.0001.
 > The remaining 44.9% reflects direct effects (likely ownership incentives and supervision quality).
+
+### Robustness checks
+
+| Specification | PforR β | p |
+|---|---|---|
+| Baseline (region FE) | +0.376 | <0.001 |
+| + Sector FE | +0.322 | <0.001 |
+| Country FE | +0.242 | 0.003 |
+| Country FE + Sector FE | +0.251 | 0.003 |
+| M&E equation, Country FE | +0.204 | <0.001 |
+
+Placebo test (500 random draws of n=120 from pre-2012 IPF pool): actual β = 0.376 exceeds 100% of placebo distribution (empirical p = 0.000).
 
 ---
 
@@ -38,11 +51,13 @@ All models include region fixed effects and HC3 robust standard errors.
 
 ```
 analysis/
-  01_exploration.py    :descriptive statistics, variable distributions, trends
-  02_regression.py     :OLS models + product-of-coefficients mediation analysis
+  01_exploration.py          :descriptive statistics, variable distributions, trends
+  02_regression.py           :OLS models + product-of-coefficients mediation analysis
+  03_robustness.py           :country/sector FE specifications + placebo test (500 iter)
+  04_bootstrap_mediation.py  :2,000-iteration bootstrap CIs + Sobel test
 data/
-  .gitkeep             :folder tracked; data file gitignored (download below)
-paper/                 :gitignored:LaTeX source + compiled PDF
+  .gitkeep                   :folder tracked; data file gitignored (download below)
+paper/                       :gitignored: LaTeX source + compiled PDF
 ```
 
 ---
@@ -66,8 +81,10 @@ pip install pandas numpy scipy statsmodels openpyxl
 **3. Run**
 
 ```bash
-python analysis/01_exploration.py   # descriptive stats
-python analysis/02_regression.py    # main results + mediation
+python analysis/01_exploration.py          # descriptive stats
+python analysis/02_regression.py           # main results + mediation
+python analysis/03_robustness.py           # country/sector FE + placebo test
+python analysis/04_bootstrap_mediation.py  # bootstrap CIs + Sobel test
 ```
 
 No other dependencies. All scripts are self-contained and print results to stdout.
